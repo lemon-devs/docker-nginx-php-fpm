@@ -6,22 +6,27 @@ RUN rm -rf /etc/yum.repos.d/* \
     && curl http://mirrors.aliyun.com/repo/Centos-7.repo > /etc/yum.repos.d/CentOS-Base.repo \
     && curl http://mirrors.aliyun.com/repo/epel-7.repo > /etc/yum.repos.d/epel.repo \
     && yum makecache \
-    && yum install -y gcc gcc-c++ make wget unzip autoconf \
+    && yum install -y gcc gcc-c++ make wget unzip autoconf cmake cmake3 \
     && useradd -s /sbin/nologin www \
-    && yum install -y pcre pcre-devel zlib zlib-devel libxml2 libxml2-devel openssl openssl-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel libmcrypt libmcrypt-devel readline readline-devel freetype freetype-devel net-tools \
+    && yum install -y pcre pcre-devel zlib zlib-devel libxml2 libxml2-devel openssl openssl-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel libmcrypt libmcrypt-devel readline readline-devel freetype freetype-devel bzip2 bzip2-devel net-tools \
     && mkdir ~/phpdir && cd ~/phpdir \
-    && wget -O php-5.6.39.tar.gz http://101.96.10.64/cn2.php.net/distributions/php-5.6.39.tar.gz \
-    && tar xf php-5.6.39.tar.gz && cd php-5.6.39 \
-    && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-opcache --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysql --with-mysqli --with-pdo-mysql --with-readline --with-zlib --with-gd --with-xmlrpc --with-mcrypt --with-openssl --with-freetype-dir --with-jpeg-dir --with-png-dir --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
+    && wget -O libzip-1.5.1.tar.gz https://libzip.org/download/libzip-1.5.1.tar.gz \
+    && tar xf libzip-1.5.1.tar.gz && cd libzip-1.5.1 \
+    && mkdir build && cd build && cmake3 .. && make -j24 && make install \
+    && echo -e "/usr/local/lib\n/usr/local/lib64\n/usr/lib\n/usr/lib64" >> /etc/ld.so.conf && ldconfig -v \
+    && cd ~/phpdir && wget -O php-7.3.1.tar.gz http://120.52.51.18/cn2.php.net/distributions/php-7.3.1.tar.gz \
+    && tar xf php-7.3.1.tar.gz && cd php-7.3.1 \
+    && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-opcache --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysqli --with-pdo-mysql --with-readline --with-zlib --with-gd --with-xmlrpc --with-openssl --with-freetype-dir --with-jpeg-dir --with-png-dir --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
     && make -j24 && make install \
     && cp php.ini-production /xcdata/server/php/etc/php.ini \
     && cp /xcdata/server/php/etc/php-fpm.conf.default /xcdata/server/php/etc/php-fpm.conf \
+    && mv /xcdata/server/php/etc/php-fpm.d/www.conf.default /xcdata/server/php/etc/php-fpm.d/www.conf \
     && yum install -y librdkafka librdkafka-devel \
-    && cd ~/phpdir/php-5.6.39/ext && wget -O php-rdkafka.zip https://github.com/arnaud-lb/php-rdkafka/archive/master.zip  \
+    && cd ~/phpdir/php-7.3.1/ext && wget -O php-rdkafka.zip https://github.com/arnaud-lb/php-rdkafka/archive/master.zip  \
     && unzip php-rdkafka.zip && cd php-rdkafka-master && /xcdata/server/php/bin/phpize \
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
     && make -j24 && make install && echo "extension = rdkafka.so" >> /xcdata/server/php/etc/php.ini \
-    && cd ~/phpdir/php-5.6.39/ext && wget -O php-redis.zip https://github.com/phpredis/phpredis/archive/develop.zip \
+    && cd ~/phpdir/php-7.3.1/ext && wget -O php-redis.zip https://github.com/phpredis/phpredis/archive/develop.zip \
     && unzip php-redis.zip && cd phpredis-develop && /xcdata/server/php/bin/phpize \
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
     && make -j24 && make install && echo "extension = redis.so" >> /xcdata/server/php/etc/php.ini \
