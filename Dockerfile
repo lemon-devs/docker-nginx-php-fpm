@@ -3,9 +3,8 @@ LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 
 # Main
 RUN rm -rf /etc/yum.repos.d/* \
-    && curl http://mirrors.aliyun.com/repo/Centos-7.repo > /etc/yum.repos.d/CentOS-Base.repo \
-    && curl http://mirrors.aliyun.com/repo/epel-7.repo > /etc/yum.repos.d/epel.repo \
-    && yum makecache \
+    && curl http://mirrors.163.com/.help/CentOS7-Base-163.repo > /etc/yum.repos.d/CentOS-Base.repo \
+    && yum install -y epel-release && yum makecache \
     && yum install -y gcc gcc-c++ make wget unzip autoconf cmake cmake3 \
     && useradd -s /sbin/nologin www \
     && yum install -y pcre pcre-devel zlib zlib-devel libxml2 libxml2-devel openssl openssl-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel libmcrypt libmcrypt-devel readline readline-devel freetype freetype-devel bzip2 bzip2-devel net-tools \
