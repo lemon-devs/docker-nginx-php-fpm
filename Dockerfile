@@ -13,24 +13,24 @@ RUN rm -rf /etc/yum.repos.d/* \
     && tar xf libzip-1.5.2.tar.gz && cd libzip-1.5.2 \
     && mkdir build && cd build && cmake3 .. && make -j24 && make install \
     && echo -e "/usr/local/lib\n/usr/local/lib64\n/usr/lib\n/usr/lib64" >> /etc/ld.so.conf && ldconfig -v \
-    && cd ~/phpdir && wget -O php-7.3.5.tar.gz https://www.php.net/distributions/php-7.3.5.tar.gz \
-    && tar xf php-7.3.5.tar.gz && cd php-7.3.5 \
+    && cd ~/phpdir && wget -O php-7.3.11.tar.gz https://www.php.net/distributions/php-7.3.11.tar.gz \
+    && tar xf php-7.3.11.tar.gz && cd php-7.3.11 \
     && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-opcache --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysqli --with-pdo-mysql --with-readline --with-zlib --with-gd --with-xmlrpc --with-openssl --with-freetype-dir --with-jpeg-dir --with-png-dir --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
     && make -j24 && make install \
     && cp php.ini-production /xcdata/server/php/etc/php.ini \
     && cp /xcdata/server/php/etc/php-fpm.conf.default /xcdata/server/php/etc/php-fpm.conf \
     && mv /xcdata/server/php/etc/php-fpm.d/www.conf.default /xcdata/server/php/etc/php-fpm.d/www.conf \
     && yum install -y librdkafka librdkafka-devel \
-    && cd ~/phpdir/php-7.3.5/ext && wget -O php-rdkafka.zip https://github.com/arnaud-lb/php-rdkafka/archive/master.zip  \
+    && cd ~/phpdir/php-7.3.11/ext && wget -O php-rdkafka.zip https://github.com/arnaud-lb/php-rdkafka/archive/master.zip  \
     && unzip php-rdkafka.zip && cd php-rdkafka-master && /xcdata/server/php/bin/phpize \
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
     && make -j24 && make install && echo "extension = rdkafka.so" >> /xcdata/server/php/etc/php.ini \
-    && cd ~/phpdir/php-7.3.5/ext && wget -O php-redis.zip https://github.com/phpredis/phpredis/archive/develop.zip \
+    && cd ~/phpdir/php-7.3.11/ext && wget -O php-redis.zip https://github.com/phpredis/phpredis/archive/develop.zip \
     && unzip php-redis.zip && cd phpredis-develop && /xcdata/server/php/bin/phpize \
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
     && make -j24 && make install && echo "extension = redis.so" >> /xcdata/server/php/etc/php.ini \
-    && cd ~/phpdir && wget http://nginx.org/download/nginx-1.16.0.tar.gz \
-    && tar xf nginx-1.16.0.tar.gz && cd ~/phpdir/nginx-1.16.0 \
+    && cd ~/phpdir && wget http://nginx.org/download/nginx-1.17.5.tar.gz \
+    && tar xf nginx-1.17.5.tar.gz && cd ~/phpdir/nginx-1.17.5 \
     && mkdir -p /var/tmp/nginx/{client,proxy,fastcgi,uwsgi,scgi} && mkdir -p /var/run/nginx \
     && ./configure --prefix=/usr/share/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/tmp/nginx/client --http-proxy-temp-path=/var/tmp/nginx/proxy --http-fastcgi-temp-path=/var/tmp/nginx/fastcgi --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi --http-scgi-temp-path=/var/tmp/nginx/scgi --user=www --group=www --with-file-aio --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-http_random_index_module --with-http_degradation_module --with-http_slice_module --with-file-aio --with-http_v2_module --with-ld-opt=-lrt --with-pcre --with-pcre-jit \
     && make -j24 && make install \
