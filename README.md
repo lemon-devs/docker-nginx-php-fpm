@@ -1,7 +1,7 @@
 ## Dockerfile
 
- - Nginx 1.15.8
- - PHP 7.3.1 with redis, kafka support
+ - Nginx 1.17.6
+ - PHP 7.4.0 with redis, kafka and swoole support
 
 ## Build
 
