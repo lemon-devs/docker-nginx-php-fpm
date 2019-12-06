@@ -2,7 +2,7 @@ FROM centos:7
 LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 
 # Main
-RUN rm -rf /etc/yum.repos.d/* \
+RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/pluginconf.d/fastestmirror.conf \
     && curl http://mirrors.163.com/.help/CentOS7-Base-163.repo > /etc/yum.repos.d/CentOS-Base.repo \
     && yum install -y epel-release && yum makecache \
     && yum install -y gcc gcc-c++ make wget unzip autoconf cmake cmake3 \
