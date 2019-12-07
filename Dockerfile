@@ -13,7 +13,7 @@ ENV NGINX_VER 1.17.6
 # Preparing
 RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/pluginconf.d/fastestmirror.conf \
     && curl http://mirrors.163.com/.help/CentOS7-Base-163.repo > /etc/yum.repos.d/CentOS-Base.repo \
-    && yum install -y epel-release \
+    && curl http://mirrors.aliyun.com/repo/epel-7.repo > /etc/yum.repos.d/epel.repo \
     && yum makecache \
     && useradd -s /sbin/nologin www \
     && mkdir ~/phpdir
