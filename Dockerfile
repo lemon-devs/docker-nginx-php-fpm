@@ -2,13 +2,12 @@ FROM centos:7
 LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 
 # Version
-ENV LIBZIP_VER 1.5.2
-ENV PHP_VER 7.4.0
-ENV RDKAFKA_VER 4.0.0
-ENV SWOOLE_VER 4.4.12
-ENV SWOOLE_ASYNC_VER 4.4.12
+ENV LIBZIP_VER 1.6.1
+ENV PHP_VER 7.4.3
+ENV RDKAFKA_VER 4.0.3
+ENV SWOOLE_VER 4.4.16
 ENV REDIS_VER 5.1.1
-ENV NGINX_VER 1.17.6
+ENV NGINX_VER 1.17.8
 
 # Preparing
 RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/pluginconf.d/fastestmirror.conf \
@@ -56,14 +55,6 @@ RUN cd ~/phpdir/php-${PHP_VER}/ext \
     && /xcdata/server/php/bin/phpize \
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config --enable-coroutine --enable-openssl --enable-http2 --enable-async-redis --enable-sockets --enable-mysqlnd \
     && make -j24 && make install && echo "extension = swoole.so" >> /xcdata/server/php/etc/php.ini
-
-## swoole_async
-RUN cd ~/phpdir/php-${PHP_VER}/ext \
-    && wget -O ext-async.tar.gz https://github.com/swoole/ext-async/archive/v${SWOOLE_ASYNC_VER}.tar.gz  \
-    && tar xf ext-async.tar.gz && cd ext-async-${SWOOLE_ASYNC_VER} \
-    && /xcdata/server/php/bin/phpize \
-    && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
-    && make -j24 && make install && echo "extension = swoole_async.so" >> /xcdata/server/php/etc/php.ini
 
 ## redis
 RUN cd ~/phpdir/php-${PHP_VER}/ext \
