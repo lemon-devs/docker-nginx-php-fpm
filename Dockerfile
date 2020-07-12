@@ -2,12 +2,12 @@ FROM centos:7
 LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 
 # Version
-ENV LIBZIP_VER 1.6.1
-ENV PHP_VER 7.4.3
+ENV LIBZIP_VER 1.7.2
+ENV PHP_VER 7.4.8
 ENV RDKAFKA_VER 4.0.3
-ENV SWOOLE_VER 4.4.16
-ENV REDIS_VER 5.1.1
-ENV NGINX_VER 1.17.8
+ENV SWOOLE_VER 4.5.2
+ENV REDIS_VER 5.3.1
+ENV NGINX_VER 1.18.0
 
 # Preparing
 RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/pluginconf.d/fastestmirror.conf \
@@ -32,7 +32,7 @@ RUN cd ~/phpdir \
 RUN cd ~/phpdir \
     && wget -O php.tar.gz https://www.php.net/distributions/php-${PHP_VER}.tar.gz \
     && tar xf php.tar.gz && cd php-${PHP_VER} \
-    && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-opcache --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysqli --with-pdo-mysql --with-readline --with-zlib --with-gd --with-xmlrpc --with-openssl --with-freetype-dir --with-jpeg-dir --with-png-dir --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
+    && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysqli --with-pdo-mysql --enable-mysqlnd --with-readline --with-zlib --enable-gd --with-xmlrpc --with-openssl --with-freetype --with-jpeg --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
     && make -j24 && make install \
     && cp php.ini-production /xcdata/server/php/etc/php.ini \
     && cp /xcdata/server/php/etc/php-fpm.conf.default /xcdata/server/php/etc/php-fpm.conf \
