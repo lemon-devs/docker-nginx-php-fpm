@@ -19,7 +19,7 @@ RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/plugi
 
 # Dependencies
 RUN yum install -y gcc gcc-c++ make wget unzip autoconf cmake cmake3 \
-    && yum install -y pcre pcre-devel zlib zlib-devel libxml2 libxml2-devel openssl openssl-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel libmcrypt libmcrypt-devel readline readline-devel freetype freetype-devel bzip2 bzip2-devel oniguruma oniguruma-devel sqlite sqlite-devel
+    && yum install -y pcre pcre-devel zlib zlib-devel libxml2 libxml2-devel openssl openssl-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel libmcrypt libmcrypt-devel readline readline-devel freetype freetype-devel bzip2 bzip2-devel oniguruma oniguruma-devel sqlite sqlite-devel postgresql postgresql-devel
 
 # libzip
 RUN cd ~/phpdir \
@@ -32,7 +32,7 @@ RUN cd ~/phpdir \
 RUN cd ~/phpdir \
     && wget -O php.tar.gz https://www.php.net/distributions/php-${PHP_VER}.tar.gz \
     && tar xf php.tar.gz && cd php-${PHP_VER} \
-    && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysqli --with-pdo-mysql --enable-mysqlnd --with-readline --with-zlib --enable-gd --with-xmlrpc --with-openssl --with-freetype --with-jpeg --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
+    && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysqli --with-pdo-mysql --enable-mysqlnd --with-readline --with-zlib --enable-gd --with-xmlrpc --with-openssl --with-freetype --with-jpeg --with-pdo-pgsql --with-pgsql --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
     && make -j24 && make install \
     && cp php.ini-production /xcdata/server/php/etc/php.ini \
     && cp /xcdata/server/php/etc/php-fpm.conf.default /xcdata/server/php/etc/php-fpm.conf \
