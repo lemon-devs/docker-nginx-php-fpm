@@ -2,10 +2,10 @@ FROM centos:7
 LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 
 # Version
-ENV LIBZIP_VER 1.7.2
-ENV PHP_VER 7.4.8
+ENV LIBZIP_VER 1.7.3
+ENV PHP_VER 7.4.10
 ENV RDKAFKA_VER 4.0.3
-ENV SWOOLE_VER 4.5.2
+ENV SWOOLE_VER 4.5.3
 ENV REDIS_VER 5.3.1
 ENV NGINX_VER 1.18.0
 
@@ -13,7 +13,7 @@ ENV NGINX_VER 1.18.0
 RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/pluginconf.d/fastestmirror.conf \
     && curl http://mirrors.163.com/.help/CentOS7-Base-163.repo > /etc/yum.repos.d/CentOS-Base.repo \
     && curl http://mirrors.aliyun.com/repo/epel-7.repo > /etc/yum.repos.d/epel.repo \
-    && yum makecache \
+    && yum makecache && yum update -y \
     && useradd -s /sbin/nologin www \
     && mkdir ~/phpdir
 
