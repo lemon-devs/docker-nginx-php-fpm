@@ -4,7 +4,6 @@ LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 # Version
 ENV BISON_VER 3.7
 ENV RDKAFKA_VER 4.0.4
-ENV SWOOLE_VER 4.5.7
 ENV REDIS_VER 5.3.2
 ENV NGINX_VER 1.18.0
 
@@ -55,14 +54,6 @@ RUN yum install -y librdkafka librdkafka-devel \
     && /xcdata/server/php/bin/phpize \
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
     && make -j24 && make install && echo "extension = rdkafka.so" >> /xcdata/server/php/etc/php.ini
-
-## swoole
-RUN cd ~/phpdir/php-${PHP_VER}/ext \
-    && wget -O swoole-src.tar.gz https://github.com/swoole/swoole-src/archive/v${SWOOLE_VER}.tar.gz  \
-    && tar xf swoole-src.tar.gz && cd swoole-src-${SWOOLE_VER} \
-    && /xcdata/server/php/bin/phpize \
-    && ./configure --with-php-config=/xcdata/server/php/bin/php-config --enable-coroutine --enable-openssl --enable-http2 --enable-async-redis --enable-sockets --enable-mysqlnd \
-    && make -j24 && make install && echo "extension = swoole.so" >> /xcdata/server/php/etc/php.ini
 
 ## redis
 RUN cd ~/phpdir/php-${PHP_VER}/ext \

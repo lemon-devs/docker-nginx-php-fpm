@@ -36,12 +36,6 @@ RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/plugi
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
     && make -j24 && make install && echo "extension = rdkafka.so" >> /xcdata/server/php/etc/php.ini \
     && cd ~/phpdir/php-src-PHP-5.6-security-backports/ext \
-    && proxychains4 wget -O swoole-src.tar.gz https://github.com/swoole/swoole-src/archive/v4.5.7.tar.gz  \
-    && tar xf swoole-src.tar.gz && cd swoole-src-4.5.7 \
-    && /xcdata/server/php/bin/phpize \
-    && ./configure --with-php-config=/xcdata/server/php/bin/php-config --enable-coroutine --enable-openssl --enable-http2 --enable-async-redis --enable-sockets --enable-mysqlnd \
-    && make -j24 && make install && echo "extension = swoole.so" >> /xcdata/server/php/etc/php.ini \
-    && cd ~/phpdir/php-src-PHP-5.6-security-backports/ext \
     && proxychains4 wget -O phpredis.tar.gz https://github.com/phpredis/phpredis/archive/5.3.2.tar.gz \
     && tar xf phpredis.tar.gz && cd phpredis-5.3.2 \
     && /xcdata/server/php/bin/phpize \
