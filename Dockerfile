@@ -4,7 +4,7 @@ LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 # Version
 ENV BISON_VER 3.7
 ENV RDKAFKA_VER 4.0.4
-ENV REDIS_VER 5.3.2
+ENV REDIS_VER 4.3.0
 ENV NGINX_VER 1.18.0
 
 # Preparing
