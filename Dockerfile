@@ -3,10 +3,10 @@ LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 
 # Version
 ENV LIBZIP_VER 1.7.3
-ENV PHP_VER 7.4.10
-ENV RDKAFKA_VER 4.0.3
-ENV SWOOLE_VER 4.5.3
-ENV REDIS_VER 5.3.1
+ENV PHP_VER 7.4.12
+ENV RDKAFKA_VER 4.0.4
+ENV SWOOLE_VER 4.5.7
+ENV REDIS_VER 5.3.2
 ENV NGINX_VER 1.18.0
 
 # Preparing
@@ -18,7 +18,7 @@ RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/plugi
     && mkdir ~/phpdir
 
 # Dependencies
-RUN yum install -y gcc gcc-c++ make wget unzip autoconf cmake cmake3 \
+RUN yum install -y gcc gcc-c++ make wget unzip autoconf cmake cmake3 file \
     && yum install -y pcre pcre-devel zlib zlib-devel libxml2 libxml2-devel openssl openssl-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel libmcrypt libmcrypt-devel readline readline-devel freetype freetype-devel bzip2 bzip2-devel oniguruma oniguruma-devel sqlite sqlite-devel postgresql postgresql-devel
 
 # libzip
