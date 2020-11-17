@@ -2,8 +2,7 @@ FROM centos:7
 LABEL maintainer "YumeMichi <do4suki@gmail.com>"
 
 # Version
-ENV LIBZIP_VER 1.7.3
-ENV PHP_VER 7.4.12
+ENV BISON_VER 3.7
 ENV RDKAFKA_VER 4.0.4
 ENV SWOOLE_VER 4.5.7
 ENV REDIS_VER 5.3.2
@@ -18,25 +17,34 @@ RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/plugi
     && mkdir ~/phpdir
 
 # Dependencies
-RUN yum install -y gcc gcc-c++ make wget unzip autoconf cmake cmake3 file \
+RUN yum install -y gcc gcc-c++ make wget unzip autoconf file \
     && yum install -y pcre pcre-devel zlib zlib-devel libxml2 libxml2-devel openssl openssl-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel libmcrypt libmcrypt-devel readline readline-devel freetype freetype-devel bzip2 bzip2-devel oniguruma oniguruma-devel sqlite sqlite-devel postgresql postgresql-devel
 
-# libzip
+# ProxyChains
 RUN cd ~/phpdir \
-    && wget -O libzip.tar.gz https://libzip.org/download/libzip-${LIBZIP_VER}.tar.gz \
-    && tar xf libzip.tar.gz && cd libzip-${LIBZIP_VER} \
-    && mkdir build && cd build && cmake3 .. && make -j24 && make install \
-    && echo -e "/usr/local/lib\n/usr/local/lib64\n/usr/lib\n/usr/lib64" >> /etc/ld.so.conf && ldconfig -v
+    && wget -O proxychains-ng.zip https://github.com/rofl0r/proxychains-ng/archive/master.zip \
+    && unzip proxychains-ng.zip && cd proxychains-ng-master \
+    && ./configure && make -j24 && make install \
+    && cp ./src/proxychains.conf /etc/proxychains.conf \
+    && sed -i '$d' /etc/proxychains.conf && sed -i '$d' /etc/proxychains.conf \
+    && sed -i '$d' /etc/proxychains.conf && sed -i '$d' /etc/proxychains.conf \
+    && echo "socks5 172.17.0.1 1080" >> /etc/proxychains.conf
+
+# Bison
+RUN cd ~/phpdir \
+    && proxychains4 wget -O bison.tar.gz http://ftp.gnu.org/gnu/bison/bison-${BISON_VER}.tar.gz \
+    && tar xf bison.tar.gz && cd bison-${BISON_VER} \
+    && ./configure && make -j24 && make install
 
 # PHP
 RUN cd ~/phpdir \
-    && wget -O php.tar.gz https://www.php.net/distributions/php-${PHP_VER}.tar.gz \
-    && tar xf php.tar.gz && cd php-${PHP_VER} \
-    && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysqli --with-pdo-mysql --enable-mysqlnd --with-readline --with-zlib --enable-gd --with-xmlrpc --with-openssl --with-freetype --with-jpeg --with-pdo-pgsql --with-pgsql --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
-    && make -j24 && make install \
+    && proxychains4 wget -O php.zip https://github.com/microsoft/php-src/archive/PHP-5.6-security-backports.zip \
+    && unzip php.zip && cd php-src-PHP-5.6-security-backports \
+    && ./buildconf --force \
+    && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-opcache --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysql --with-mysqli --with-pdo-mysql --enable-mysqlnd --with-readline --with-zlib --with-gd --with-xmlrpc --with-mcrypt --with-openssl --with-freetype-dir --with-jpeg-dir --with-png-dir --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
+    && make -j24 && proxychains4 make install \
     && cp php.ini-production /xcdata/server/php/etc/php.ini \
-    && cp /xcdata/server/php/etc/php-fpm.conf.default /xcdata/server/php/etc/php-fpm.conf \
-    && mv /xcdata/server/php/etc/php-fpm.d/www.conf.default /xcdata/server/php/etc/php-fpm.d/www.conf
+    && cp /xcdata/server/php/etc/php-fpm.conf.default /xcdata/server/php/etc/php-fpm.conf
 
 # Extensions
 ## rdkafka
