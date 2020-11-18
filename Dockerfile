@@ -73,7 +73,7 @@ RUN cd ~/phpdir/php-src-PHP-5.6-security-backports/ext \
     && ln -s /usr/local/zbar/lib/pkgconfig/zbar.pc /usr/lib64/pkgconfig/zbar.pc \
     && cd ~/phpdir/php-src-PHP-5.6-security-backports/ext \
     && wget -O php-zbarcode.zip https://github.com/YumeMichi/php-zbarcode/archive/php-5.6.zip \
-    && cd php-zbarcode-php-5.6 && /xcdata/server/php/bin/phpize \
+    && unzip php-zbarcode.zip && cd php-zbarcode-php-5.6 && /xcdata/server/php/bin/phpize \
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
     && make -j24 && make install && echo "extension = zbarcode.so" >> /xcdata/server/php/etc/php.ini
 
