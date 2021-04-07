@@ -22,7 +22,7 @@ RUN rm -rf /etc/yum.repos.d/* && sed -i 's|enabled=1|enabled=0|g' /etc/yum/plugi
     && tar xf bison.tar.gz && cd bison-3.7 \
     && ./configure && make -j24 && make install \
     && cd ~/phpdir \
-    && proxychains4 wget -O php.zip https://github.com/microsoft/php-src/archive/PHP-5.6-security-backports.zip \
+    && proxychains4 wget -O php.zip https://github.com/YumeMichi/php-src/archive/PHP-5.6-security-backports.zip \
     && unzip php.zip && cd php-src-PHP-5.6-security-backports && ./buildconf --force \
     && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-opcache --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysql --with-mysqli --with-pdo-mysql --enable-mysqlnd --with-readline --with-zlib --with-gd --with-xmlrpc --with-mcrypt --with-openssl --with-freetype-dir --with-jpeg-dir --with-png-dir --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
     && make -j24 && proxychains4 make install \
