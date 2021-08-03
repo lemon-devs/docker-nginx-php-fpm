@@ -37,8 +37,8 @@ RUN cd ~/phpdir \
 
 # PHP
 RUN cd ~/phpdir \
-    && wget -O php.zip https://github.com/YumeMichi/php-src/archive/PHP-5.6-security-backports-openssl11.zip \
-    && unzip php.zip && cd php-src-PHP-5.6-security-backports-openssl11 \
+    && wget -O php.zip https://github.com/YumeMichi/php-src/archive/PHP-5.6-security-backports.zip \
+    && unzip php.zip && cd php-src-PHP-5.6-security-backports \
     && ./buildconf --force \
     && ./configure --prefix=/xcdata/server/php --with-config-file-path=/xcdata/server/php/etc --enable-inline-optimization --enable-sockets --enable-bcmath --enable-zip --enable-mbstring --enable-opcache --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-curl --with-mysql --with-mysqli --with-pdo-mysql --enable-mysqlnd --with-readline --with-zlib --with-gd --with-xmlrpc --with-mcrypt --with-openssl --with-freetype-dir --with-jpeg-dir --with-png-dir --disable-ipv6 --disable-debug --disable-maintainer-zts --disable-fileinfo \
     && make -j24 && make install \
@@ -48,7 +48,7 @@ RUN cd ~/phpdir \
 # Extensions
 ## rdkafka
 RUN yum install -y librdkafka librdkafka-devel \
-    && cd ~/phpdir/php-src-PHP-5.6-security-backports-openssl11/ext \
+    && cd ~/phpdir/php-src-PHP-5.6-security-backports/ext \
     && wget -O php-rdkafka.tar.gz https://github.com/arnaud-lb/php-rdkafka/archive/${RDKAFKA_VER}.tar.gz  \
     && tar xf php-rdkafka.tar.gz && cd php-rdkafka-${RDKAFKA_VER} \
     && /xcdata/server/php/bin/phpize \
@@ -56,7 +56,7 @@ RUN yum install -y librdkafka librdkafka-devel \
     && make -j24 && make install && echo "extension = rdkafka.so" >> /xcdata/server/php/etc/php.ini
 
 ## redis
-RUN cd ~/phpdir/php-src-PHP-5.6-security-backports-openssl11/ext \
+RUN cd ~/phpdir/php-src-PHP-5.6-security-backports/ext \
     && wget -O phpredis.tar.gz https://github.com/phpredis/phpredis/archive/${REDIS_VER}.tar.gz \
     && tar xf phpredis.tar.gz && cd phpredis-${REDIS_VER} \
     && /xcdata/server/php/bin/phpize \
@@ -64,14 +64,14 @@ RUN cd ~/phpdir/php-src-PHP-5.6-security-backports-openssl11/ext \
     && make -j24 && make install && echo "extension = redis.so" >> /xcdata/server/php/etc/php.ini
 
 ## zbarcode
-RUN cd ~/phpdir/php-src-PHP-5.6-security-backports-openssl11/ext \
+RUN cd ~/phpdir/php-src-PHP-5.6-security-backports/ext \
     && yum install -y ImageMagick ImageMagick-devel \
     && wget -O zbar.tar.gz https://newcontinuum.dl.sourceforge.net/project/zbar/zbar/0.10/zbar-0.10.tar.gz \
     && tar xf zbar.tar.gz && cd zbar-0.10 \
     && ./configure --prefix=/usr/local/zbar --without-gtk --without-python --without-qt --disable-video \
     && make -j24 && make install && ldconfig -v \
     && ln -s /usr/local/zbar/lib/pkgconfig/zbar.pc /usr/lib64/pkgconfig/zbar.pc \
-    && cd ~/phpdir/php-src-PHP-5.6-security-backports-openssl11/ext \
+    && cd ~/phpdir/php-src-PHP-5.6-security-backports/ext \
     && wget -O php-zbarcode.zip https://github.com/YumeMichi/php-zbarcode/archive/php-5.6.zip \
     && unzip php-zbarcode.zip && cd php-zbarcode-php-5.6 && /xcdata/server/php/bin/phpize \
     && ./configure --with-php-config=/xcdata/server/php/bin/php-config \
